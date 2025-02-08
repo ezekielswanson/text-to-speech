@@ -37,6 +37,8 @@ function loadVoices() {
         options.value = i;
         voiceSelect.appendChild(options);
     });
+
+    console.log(voices)
         
 }
 
