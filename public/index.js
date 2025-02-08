@@ -35,7 +35,7 @@ function loadVoices() {
         const options = document.createElement("option");
         options.textContent = `${voice.name} (${voice.lang})`;
         options.value = i;
-        voiceOptions.append(options);
+        voiceSelect.appendChild(options);
     });
         
 }
@@ -54,7 +54,7 @@ if ("onvoiceschanged" in speechSynth) {
 
 //could potentially pass in voices, pitch, etc, as a param here to use voice
 
-playBtn.addEventListener('click', (e) => {
+playButton.addEventListener('click', (e) => {
     e.preventDefault();
   
 
@@ -66,7 +66,7 @@ playBtn.addEventListener('click', (e) => {
     const utterance = new SpeechSynthesisUtterance(textInput.value);
     console.log(utterance)
     console.log(voices);
-    utterance.voice = voices[voiceOptions.value];
+    utterance.voice = voices[voiceSelect.value];
     speechSynth.speak(utterance);
     
     
