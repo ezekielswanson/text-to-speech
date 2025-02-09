@@ -35,6 +35,7 @@ function loadVoices() {
         const options = document.createElement("option");
         options.textContent = `${voice.name} (${voice.lang})`;
         options.value = i;
+        options.setAttribute("data-lang", voice.lang)
         voiceSelect.appendChild(options);
     });
 
