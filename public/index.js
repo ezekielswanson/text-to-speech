@@ -71,16 +71,14 @@ output
 
 */
 
-function loadLanguages() {
-    languages.forEach(language => {
-        const langOptions = document.createElement("option");
-        langOptions.textContent = `${language.code} ${language.name}`
-        languageSelect.appendChild(langOptions);
-    })
 
-}
+languages.forEach((code, name) => {
+    const langOptions = document.createElement("option");
+    langOptions.value = code
+    langOptions.textContent = name;
+    languageSelect.appendChild(langOptions);
+})
 
-loadLanguages();
 
 
  // in Google Chrome the voices are not ready on page load
