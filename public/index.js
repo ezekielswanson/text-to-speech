@@ -1,3 +1,6 @@
+
+require('dotenv').config()
+
 //Write the full program out in english first
 
 
