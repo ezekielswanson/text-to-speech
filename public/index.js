@@ -24,6 +24,16 @@ const speechSynth = window.speechSynthesis;
 //need to load the voices in the array and access the voices in the event listener
 let voices;
 
+
+//languages
+const languages = [
+  { code: 'en', name: 'English' },
+  { code: 'es', name: 'Spanish' },
+  { code: 'fr', name: 'French' },
+  { code: 'de', name: 'German' },
+  { code: 'it', name: 'Italian' }
+]
+
 //Get voices function
 function loadVoices() {
 
@@ -42,6 +52,35 @@ function loadVoices() {
     console.log(voices)
         
 }
+
+
+//language
+
+/*
+purpsose 
+    -load a list of of languges from the  languages  array
+input 
+    - the languages in the array
+
+output
+    -shows the languages in the language drop down select
+
+    -create the option 
+    insert the texst into the option
+    append the option to the language select
+
+*/
+
+function loadLanguages() {
+    languages.forEach(language => {
+        const langOptions = document.createElement("option");
+        langOptions.textContent = `${language.code} ${language.name}`
+        languageSelect.appendChild(langOptions);
+    })
+
+}
+
+loadLanguages();
 
 
  // in Google Chrome the voices are not ready on page load
