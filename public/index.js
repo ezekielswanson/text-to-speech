@@ -1,17 +1,4 @@
-
 require('dotenv').config()
-
-//Write the full program out in english first
-
-
-/*
-
-User inputs text
-selects the voice
-hits play
-text plays in selected voice
-*/
-
 
 
 //Selecting inputs
@@ -57,24 +44,6 @@ function loadVoices() {
 }
 
 
-//language
-
-/*
-purpsose 
-    -load a list of of languges from the  languages  array
-input 
-    - the languages in the array
-
-output
-    -shows the languages in the language drop down select
-
-    -create the option 
-    insert the texst into the option
-    append the option to the language select
-
-*/
-
-
 languages.forEach((code, name) => {
     const langOptions = document.createElement("option");
     langOptions.value = code
@@ -95,58 +64,98 @@ if ("onvoiceschanged" in speechSynth) {
 
 
 
-//could potentially pass in voices, pitch, etc, as a param here to use voice
-
-playButton.addEventListener('click', (e) => {
-    e.preventDefault();
-  
-
-    console.log('btn clicked');
-
-    //see what values I can pass into the SpeechSynthesisUtterance()
-
-    
-    const utterance = new SpeechSynthesisUtterance(textInput.value);
-    console.log(utterance)
-    console.log(voices);
-    utterance.voice = voices[voiceSelect.value];
-    speechSynth.speak(utterance);
-    
-    
-})
 
 
 
+//Connect w/ serverless function
+/*
+
+Purpose
+    -take the text and langauge and send it to the serverelss function
+Input
+    -text, language
+Output
+ -transalted text 
+*/
+
+
+
+async function translateText(text, targetLang) {
+    const config = {
+        method: 'POST',
+        headers: {
+            accept: "application/json",
+            "content-type": "application/json"
+        },
+        body: JSON.stringify({
+            text,
+            target: targetLang
+        })
+    };
+
+    try {
+        const response = await fetch('/api/translate', config);
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${await response.text()}`);
+        }
+
+        const data = await response.json();
+        return data.data.translations[0].translatedText;
+    } 
+    catch (error) {
+        console.error('Translation Error:', error);
+        alert('Failed to translate text');
+        return text;
+    }
+}
 
 /*
 
-
-Purpose 
-    -get text and play the speech back in the voice selected
-input 
-    -text input from user
-    -selected voice type
-
-outuput 
-    -place the text in the selected voice
+Purpose
+    -
+Input
+Output
 
 
 
-methods 
-SpeechSynthesisUtterance 
- It contains the content the speech service
-should read and information about how to read it (e.g. language, pitch and volume.)
 
-
-properties 
-SpeechSynthesisUtterance.pitch
-Gets and sets the pitch at which the utterance will be spoken at.
-
-SpeechSynthesisUtterance.rate
-Gets and sets the speed at which the utterance will be spoken at.
-
-SpeechSynthesisUtterance.text
-Gets and sets the text that will be synthesized when the utterance is spoken.
 
 
 */
+
+
+
+function speakText(text, voiceIndex) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    //console.log(utterance)
+   //console.log(voices);
+    utterance.voice = voices[voiceIndex];
+    speechSynth.speak(utterance);
+
+
+
+}
+
+
+
+//could potentially pass in voices, pitch, etc, as a param here to use voice
+
+playButton.addEventListener('click', async(e) => {
+    e.preventDefault();
+    console.log('btn clicked');
+
+    //define text, targetLang
+    const text = textInput.value.trim();
+    const targetLang = languageSelect.value;
+    const selectedVoice = voiceSelect.value;  // Get the voice value from select element
+
+    try {
+        const translatedText = await translateText(text, targetLang);
+        speakText(translatedText, selectedVoice);  // Pass the values to speakText
+    }
+    catch (error) {
+        console.error('Error during processing: ', error);
+        alert('An error occurred');
+    }
+})
