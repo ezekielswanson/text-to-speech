@@ -1,4 +1,4 @@
-require('dotenv').config()
+//require('dotenv').config()
 
 
 //Selecting inputs
@@ -24,6 +24,16 @@ const languages = [
   { code: 'it', name: 'Italian' }
 ]
 
+
+languages.forEach((language) => {
+    const langOptions = document.createElement("option");
+    langOptions.value = language.code;
+    langOptions.textContent = language.name;
+    languageSelect.appendChild(langOptions);
+
+    console.log(langOptions);
+})
+
 //Get voices function
 function loadVoices() {
 
@@ -44,12 +54,7 @@ function loadVoices() {
 }
 
 
-languages.forEach((code, name) => {
-    const langOptions = document.createElement("option");
-    langOptions.value = code
-    langOptions.textContent = name;
-    languageSelect.appendChild(langOptions);
-})
+
 
 
 
@@ -117,11 +122,6 @@ Purpose
 Input
 Output
 
-
-
-
-
-
 */
 
 
@@ -159,3 +159,7 @@ playButton.addEventListener('click', async(e) => {
         alert('An error occurred');
     }
 })
+
+
+
+
