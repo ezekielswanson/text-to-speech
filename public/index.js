@@ -31,7 +31,7 @@ languages.forEach((language) => {
     langOptions.textContent = language.name;
     languageSelect.appendChild(langOptions);
 
-    console.log(langOptions);
+    //console.log(langOptions);
 })
 
 //Get voices function
@@ -49,7 +49,7 @@ function loadVoices() {
         voiceSelect.appendChild(options);
     });
 
-    console.log(voices)
+    //console.log(voices)
         
 }
 
@@ -143,7 +143,7 @@ function speakText(text, voiceIndex) {
 
 playButton.addEventListener('click', async(e) => {
     e.preventDefault();
-    console.log('btn clicked');
+    //console.log('btn clicked');
 
     //define text, targetLang
     const text = textInput.value.trim();
