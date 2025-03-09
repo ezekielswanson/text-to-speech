@@ -44,7 +44,7 @@ function dropHandler(event) {
     if (event.dataTransfer.items.length === 1 ) {
 
         const uploadedFile = event.dataTransfer.items[0]
-        let file = uploadedFile.getAsFile();
+        file = uploadedFile.getAsFile();
         fileValidation(file);
         
     }
@@ -58,16 +58,20 @@ function dropHandler(event) {
         return;
     }
 
-
+    //create form object
+	  const formData = new FormData();
 
     //file name
     const fileName = file.name;
-	  const formData = new FormData();
 
+    //append the file name
+    formData.append('Name', fileName);
 
-    formData.append('Name', fileName.value);
+    //append the file
+    formData.append('file', file)
 	
-
+    //console.log('Name value:', formData.get('Name'));
+    //console.log('file value:', formData.get('file'));
     
 
 
