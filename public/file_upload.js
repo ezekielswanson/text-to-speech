@@ -16,40 +16,37 @@ pass in event
 */
 
 
-function fileValidation() {
+function fileValidation(file) {
 
-    const fileToValidate = document.querySelector('#fileInput');
+    const fileToValidate = file.name;
     console.log(fileToValidate, "file-val-check");
-    const filePath = fileToValidate.value;
 
     let allowedExtensions = /(\.txt|\.doc|\.docx|\.pdf)$/i;;
 
-    if (!allowedExtensions.exec(allowedExtensions)) {
+    if (!allowedExtensions.exec(fileToValidate)) {
         alert('Invalid File Type: Please upload a .txt, .doc. docx, or .pdf file type');
         fileInput.value = '';
         return false;
     }
+
+    return true;
 }
 
 
 function dropHandler(event) {
 
     event.preventDefault();
-
-    //Validates file on drop
-    fileValidation();
-
+   
+    //Setting file var
     let file;
 
+    //Ensure 1 file and validate
     if (event.dataTransfer.items.length === 1 ) {
 
         const uploadedFile = event.dataTransfer.items[0]
-        let file = item.getAsFile();
-            
+        let file = uploadedFile.getAsFile();
+        fileValidation(file);
         
-
-
-
     }
 
 
@@ -57,14 +54,15 @@ function dropHandler(event) {
         [...event.dataTransfer.files].forEach((file, i) => {
             console.log(`… file[${i}].name = ${file.name}`);
         });
+
+        return;
     }
 
 
 
     //file name
     const fileName = file.name;
-
-	const formData = new FormData();
+	  const formData = new FormData();
 
 
     formData.append('Name', fileName.value);
