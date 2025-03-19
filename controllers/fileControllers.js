@@ -1,7 +1,6 @@
 const File = require('../model/fileModel');
 const textExtractor = require('../services/textExtractor');
-const translationService = require('../services/translationService');
-
+// Note: We're removing the translationService import since we'll use the API directly
 
 // Controller for uploading a file
 exports.uploadFile = async (req, res) => {
@@ -84,6 +83,7 @@ exports.getAllFiles = async (req, res) => {
 };
 
 // Controller for translating file content
+// THIS IS THE UPDATED METHOD THAT USES THE EXISTING API ENDPOINT
 exports.translateFile = async (req, res) => {
   try {
     const { id } = req.params;
@@ -111,9 +111,27 @@ exports.translateFile = async (req, res) => {
         translation: file.translatedContent.get(targetLanguage)
       });
     }
-
-    // Translate the text
-    const translatedText = await translationService.translateText(file.textContent, targetLanguage);
+    
+    // Use the existing translate API endpoint
+    const apiUrl = `${req.protocol}://${req.get('host')}/api/translate`;
+    
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        text: file.textContent,
+        target: targetLanguage
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Translation API returned ${response.status}`);
+    }
+    
+    const data = await response.json();
+    const translatedText = data.data.translations[0].translatedText;
 
     // Save the translation
     file.translatedContent.set(targetLanguage, translatedText);
@@ -122,7 +140,6 @@ exports.translateFile = async (req, res) => {
     // Return the translation
     res.json({
       message: 'Translation successful',
-      originalLanguage: await translationService.detectLanguage(file.textContent),
       targetLanguage,
       translation: translatedText
     });
