@@ -1,6 +1,6 @@
 const multer = require('multer');
 
-// Set up multer storage - using memory storage for file processing
+//Multer storage
 const storage = multer.memoryStorage();
 
 // Create multer upload instance with 5MB file size limit

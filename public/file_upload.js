@@ -1,3 +1,6 @@
+
+
+
 function fileValidation(file) {
   const fileToValidate = file.name;
   console.log(fileToValidate, "file-val-check");
